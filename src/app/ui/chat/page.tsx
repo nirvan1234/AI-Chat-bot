@@ -1,6 +1,7 @@
 "use client"
 
 import { useChat } from "@ai-sdk/react";
+import Image from "next/image";
 import { useState } from "react";
 
 export default function ChatPage() {
@@ -25,6 +26,19 @@ export default function ChatPage() {
                     switch (part.type) {
                         case "text":
                             return <div className="whitespace-pre-wrap">{part.text}</div>
+                        case "file":
+                            if (part.mediaType?.startsWith("image/")) {
+                                return (
+                                  <Image
+                                    key={`${message.id}-${index}`}
+                                    src={part.url}
+                                    alt={part.filename ?? `attachment-${index}`}
+                                    width={500}
+                                    height={500}
+                                  />
+                                );
+                              }
+                            return null;
                         default:
                             return null
                     }
